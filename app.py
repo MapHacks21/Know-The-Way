@@ -90,7 +90,7 @@ def reply():
     print(route_parsing)
     if "cancel" in message:
         route_parsing = 0
-        updateJsonData(fname, route_parsing, location, "walk", destinations)
+        updateJsonData(fname, route_parsing, location, "walk", [])
         return respond("Input cancelled")
     elif route_parsing == 1:
         print("collecting location")
@@ -156,7 +156,7 @@ def reply():
     elif "suggestions" in message:
         print("suggestions")
         keywords = message.replace('suggestions ', "")
-        info = SerpApiSearches.search_location(keywords)
+        info = SerpApiSearches.suggest_location(keywords)
 
         return respond(info)
     elif 'help' in message or 'instruction' in message or 'how to' in message:
