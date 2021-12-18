@@ -14,7 +14,7 @@ url = 'https://api.routexl.com/tour/'
 geolocator = Nominatim(user_agent="knowtheway")
 
 
-def get_route(arr):
+def get_address_json(arr):
     address_arr = []
     for location in arr:
         print(location)
@@ -24,6 +24,12 @@ def get_route(arr):
         temp_dict = {"address": f"{addr1}", "lat": f"{lat}", "lng": f"{long}"}
         address_arr.append(temp_dict)
 
+    return address_arr
+
+
+def get_route(arr):
+    address_arr = get_address_json(arr)
+    print(address_arr)
     address_arr_json = json.dumps(address_arr)
 
     session = requests.Session()
@@ -81,9 +87,9 @@ def route_reply_msg(arr, transport):
 # route_info = get_route(arr)
 # t = 'transit'
 # dir = get_all_directions(route_info, t)
-
+#
 # hi = get_directions('nus, singapore', 'vivo city, singapore', t)
-
+#
 # print(dir)
 
 # geolocator = Nominatim(user_agent="knowtheway")
