@@ -1,9 +1,9 @@
 {
   "copyrights" : [ "GraphHopper", "OpenStreetMap contributors" ],
-  "job_id" : "2f47bc37-8a2e-4cfc-a72f-45da114f8d1f",
+  "job_id" : "88e0c1df-39b0-446b-a4d2-efb1bb382f6e",
   "status" : "finished",
   "waiting_time_in_queue" : 0,
-  "processing_time" : 279,
+  "processing_time" : 202,
   "solution" : {
     "costs" : 216,
     "distance" : 7696,
