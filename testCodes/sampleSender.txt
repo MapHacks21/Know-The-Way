@@ -1,0 +1,33 @@
+'''
+0 - not active
+1 - collecting locale for precise search (aka country)
+2 - collecting travel method
+3 - collecting locations
+4 - confirming returning order
+5 - recuring
+'''
+0
+dawae route
+"What country are the locations in?"
+1
+Singapore
+"What is your travel method (car, walk, cycle, transit)?"
+2
+cycle
+"List the locations you want to visit today!"
+3
+Sentosa
+NLB
+Ikea
+NUS
+done <-  check for this in last line
+"confirm location (yes, no, cancel)"
+4
+yes
+~ backend stuff magic ~
+"Here are the locations in optimal route order:
+1. Sentosa -> NLB [4 min] [15 km]
+2. NLB -> Ikea [3 min] [14 min] "
+"Do you want image guides? (yes, no)"
+
+
