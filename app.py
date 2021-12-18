@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import SerpApiSearches
+import route
 
 load_dotenv()
 
@@ -36,7 +37,7 @@ HELP_STR2 = 'Invalid command.\n' \
 4 - confirming returning order
 5 - 
 '''
-route_parsing = 0;
+route_parsing = 0
 destinations = []
 
 def respond(message):
@@ -54,6 +55,9 @@ def reply():
     # media_url = request.form.get('MediaUrl0')
     print(f'{sender} sent {message}')
 
+    if route_parsing == 0:
+        print("hi")
+
     if 'dawae' in message:
         print('dawae')
         keywords = message.replace('dawae ', '')
@@ -61,9 +65,8 @@ def reply():
         if keywords == '':
             return respond('No search term given. Please try again with keywords.')
         elif "route" in keywords:
-            info = ""
-
-
+            info = "What country are the locations in?"
+            route_parsing = 1
             return respond(info)
     elif "suggestions" in message:
         print("suggestions")
