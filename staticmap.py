@@ -20,6 +20,7 @@ def reply_image_msg(arr):
     url = "https://api.imgbb.com/1/upload"
     payload = {
         "key": secrets.imgbb_api,
+        "expiration": 120,
         "image": base64.b64encode(response.content),
     }
     res = requests.post(url, payload)
