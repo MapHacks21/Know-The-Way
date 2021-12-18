@@ -69,7 +69,7 @@ def reply():
 
     # check if the corresponding json exists for the sender
     fname = sender + ".json"
-    if os.path.isfile():
+    if os.path.isfile(fname):
         # read the json storing previous message info
         with open(fname) as json_file:
             data = json.load(json_file)
