@@ -71,12 +71,18 @@ def get_all_directions(info_json, transport):
     return output
 
 
+def route_reply_msg(arr, transport):
+    route_info = get_route(arr)
+    dir = get_all_directions(route_info, transport)
+
+    return dir
+
 # arr = ['nus, singapore', 'botanic gardens, singapore', 'vivo city, singapore']
 # route_info = get_route(arr)
 # t = 'transit'
 # dir = get_all_directions(route_info, t)
 
-#hi = get_directions('nus, singapore', 'vivo city, singapore', t)
+# hi = get_directions('nus, singapore', 'vivo city, singapore', t)
 
 # print(dir)
 
