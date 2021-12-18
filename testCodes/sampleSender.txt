@@ -14,7 +14,7 @@ Singapore
 "What is your travel method (car, walk, cycle, transit)?"
 2
 cycle
-"List the locations you want to visit today!"
+"List the locations you want to visit today:"
 3
 Sentosa
 NLB

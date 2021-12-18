@@ -6,6 +6,23 @@ from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import SerpApiSearches
 import route
+import json
+
+
+# defaultData = {
+#   "route_parsing": 0,
+#   "location": "",
+#   "transport": "walk",
+#   "destinations": []
+# }
+#
+# with open('data.json', 'w') as outfile:
+#     json.dump(defaultData, outfile)
+#
+# with open("data.json") as json_file:
+#     data = json.load(json_file)
+#     print(data)
+
 
 load_dotenv()
 
@@ -24,7 +41,6 @@ HELP_STR1 = 'Welcome to *Know The Way*!\n' \
             'keywords: _instructions_, _help_ , _how to_\n' \
             'Thanks for using Know The Way!'
 
-Bonus_Suggestion_Feature =
 HELP_STR2 = 'Invalid command.\n' \
             'To view this instruction message again, you can send a message containing the following ' \
             'keywords:\ninstructions, help , how to'
@@ -37,8 +53,6 @@ HELP_STR2 = 'Invalid command.\n' \
 4 - confirming returning order
 5 - 
 '''
-route_parsing = 0
-destinations = []
 
 def respond(message):
     response = MessagingResponse()
@@ -52,21 +66,91 @@ def reply():
     sender = request.form.get('From')
     message = request.form.get('Body').lower()
 
-    # media_url = request.form.get('MediaUrl0')
+    # check if the corresponding json exists for the sender
+    fname = sender + ".json"
+    if os.path.isfile():
+        # read the json storing previous message info
+        with open(fname) as json_file:
+            data = json.load(json_file)
+            print(data)
+            route_parsing = data["route_parsing"]
+            location = data["location"]
+            transport = data["transport"]
+            destinations = data["destinations"]
+    else:
+        route_parsing = 0
+        location = ""
+        transport = "walk"
+        destinations = []
+        updateJsonData(fname, route_parsing, location, transport, destinations)
+
     print(f'{sender} sent {message}')
 
-    if route_parsing == 0:
-        print("hi")
-
-    if 'dawae' in message:
+    print(route_parsing)
+    if "cancel" in message:
+        route_parsing = 0
+        updateJsonData(fname, route_parsing, location, "walk", destinations)
+        return respond("Input cancelled")
+    elif route_parsing == 1:
+        print("collecting location")
+        if message:
+            location = message
+            route_parsing = 2
+            updateJsonData(fname, route_parsing, location, transport, destinations)
+            return respond("What is your travel method (car, walk, cycle, transit)?")
+        else:
+            return respond("Please input location")
+    elif route_parsing == 2:
+        if "cycle" in message:
+            route_parsing = 3
+            updateJsonData(fname, route_parsing, location, "cycle", destinations)
+            return respond("List the locations you want to visit today (comma separated):")
+        elif "walk" in message:
+            route_parsing = 3
+            updateJsonData(fname, route_parsing, location, "walk", destinations)
+            return respond("List the locations you want to visit today (comma separated):")
+        elif "car" in message:
+            route_parsing = 3
+            updateJsonData(fname, route_parsing, location, "car", destinations)
+            return respond("List the locations you want to visit today (comma separated):")
+        elif "transit" in message:
+            route_parsing = 3
+            updateJsonData(fname, route_parsing, location, "transit", destinations)
+            return respond("List the locations you want to visit today (comma separated):")
+        else:
+            return respond("Invalid! Please enter one of the following\n" \
+                           "'car', 'walk', 'cycle', 'transit'\n"
+                           "or type 'cancel' to cancel input")
+    elif route_parsing == 3:
+        if message:
+            places = message.split(",")
+            for place in places:
+                destinations.append(place.strip() + "," + location)
+            route_parsing = 4
+            updateJsonData(fname, route_parsing, location, transport, destinations)
+            return respond("Here are the locations in optimal route order:\n" + route.route_reply_msg(destinations) + "\n" + "Do you want image guides? (yes, no)")
+        else:
+            return respond("Please input destinations, or type 'cancel' to escape")
+    elif route_parsing == 4:
+        route_parsing = 0
+        updateJsonData(fname, route_parsing, location, transport, destinations)
+        if "yes" in message:
+            IMG_URL = "https://i.ibb.co/VWBQCm0/8bcf1319abe0.png"
+            response = MessagingResponse()
+            msg = response.message("Enjoy your trip!")
+            msg.media(IMG_URL)
+            return str(response)
+        else:
+            return respond("Enjoy your trip!")
+    elif 'dawae' in message:
         print('dawae')
         keywords = message.replace('dawae ', '')
-
         if keywords == '':
             return respond('No search term given. Please try again with keywords.')
         elif "route" in keywords:
             info = "What country are the locations in?"
             route_parsing = 1
+            updateJsonData(fname, route_parsing, location, transport, destinations)
             return respond(info)
     elif "suggestions" in message:
         print("suggestions")
@@ -82,3 +166,14 @@ def reply():
 
     else:
         return respond(HELP_STR2)
+
+def updateJsonData(fname, route_parsing, location, transport, destinations):
+    defaultData = {
+        "route_parsing": route_parsing,
+        "location": location,
+        "transport": transport,
+        "destinations": destinations
+    }
+
+    with open(fname, 'w') as outfile:
+        json.dump(defaultData, outfile)
