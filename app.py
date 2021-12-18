@@ -136,7 +136,7 @@ def reply():
         route_parsing = 0
         updateJsonData(fname, route_parsing, location, transport, destinations)
         if "yes" in message:
-            IMG_URL = staticmap.reply_image_msg(destinations)
+            IMG_URL = staticmap.reply_image_msg(destinations, transport)
             response = MessagingResponse()
             msg = response.message("Enjoy your trip!")
             msg.media(IMG_URL)
@@ -148,7 +148,7 @@ def reply():
         keywords = message.replace('dawae ', '')
         if keywords == '':
             return respond('No search term given. Please try again with keywords.')
-        elif "route" in keywords:
+        else:
             info = "What country are the locations in?"
             route_parsing = 1
             updateJsonData(fname, route_parsing, location, transport, destinations)
@@ -162,9 +162,6 @@ def reply():
     elif 'help' in message or 'instruction' in message or 'how to' in message:
         print('help')
         return respond(HELP_STR1)
-
-    # elif media_url:
-
     else:
         return respond(HELP_STR2)
 
