@@ -7,6 +7,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import SerpApiSearches
 import route
 import json
+import staticmap
 
 
 # defaultData = {
@@ -50,7 +51,7 @@ HELP_STR2 = 'Invalid command.\n' \
 1 - collecting locale for precise search (aka country)
 2 - collecting travel method
 3 - collecting locations
-4 - confirming returning order
+4 - confirming returning image
 5 - 
 '''
 
@@ -135,7 +136,7 @@ def reply():
         route_parsing = 0
         updateJsonData(fname, route_parsing, location, transport, destinations)
         if "yes" in message:
-            IMG_URL = "https://i.ibb.co/VWBQCm0/8bcf1319abe0.png"
+            IMG_URL = staticmap.reply_image_msg(destinations)
             response = MessagingResponse()
             msg = response.message("Enjoy your trip!")
             msg.media(IMG_URL)
