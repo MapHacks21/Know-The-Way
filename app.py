@@ -129,7 +129,7 @@ def reply():
                 destinations.append(place.strip() + "," + location)
             route_parsing = 4
             updateJsonData(fname, route_parsing, location, transport, destinations)
-            return respond("Here are the locations in optimal route order:\n" + route.route_reply_msg(destinations, transport + "\n" + "Do you want image guides? (yes, no)")
+            return respond("Here are the locations in optimal route order:\n" + route.route_reply_msg(destinations, transport) + "\n" + "Do you want image guides? (yes, no)")
         else:
             return respond("Please input destinations, or type 'cancel' to escape")
     elif route_parsing == 4:
