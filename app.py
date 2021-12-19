@@ -104,22 +104,22 @@ def reply():
     elif route_parsing == 2:
         if "cycle" in message:
             route_parsing = 3
-            updateJsonData(fname, route_parsing, location, "cycle", destinations)
+            updateJsonData(fname, route_parsing, location, "bicycling", destinations)
             return respond("List the locations you want to visit today (comma separated):")
         elif "walk" in message:
             route_parsing = 3
-            updateJsonData(fname, route_parsing, location, "walk", destinations)
+            updateJsonData(fname, route_parsing, location, "walking", destinations)
             return respond("List the locations you want to visit today (comma separated):")
         elif "car" in message:
             route_parsing = 3
-            updateJsonData(fname, route_parsing, location, "car", destinations)
+            updateJsonData(fname, route_parsing, location, "driving", destinations)
             return respond("List the locations you want to visit today (comma separated):")
         elif "transit" in message:
             route_parsing = 3
             updateJsonData(fname, route_parsing, location, "transit", destinations)
             return respond("List the locations you want to visit today (comma separated):")
         else:
-            return respond("Invalid! Please enter one of the following\n" \
+            return respond("Invalid! Please enter one of the following\n"
                            "'car', 'walk', 'cycle', 'transit'\n"
                            "or type 'cancel' to cancel input")
     elif route_parsing == 3:
@@ -129,14 +129,14 @@ def reply():
                 destinations.append(place.strip() + "," + location)
             route_parsing = 4
             updateJsonData(fname, route_parsing, location, transport, destinations)
-            return respond("Here are the locations in optimal route order:\n" + route.route_reply_msg(destinations) + "\n" + "Do you want image guides? (yes, no)")
+            return respond("Here are the locations in optimal route order:\n" + route.route_reply_msg(destinations, transport) + "\n" + "Do you want image guides? (yes, no)")
         else:
             return respond("Please input destinations, or type 'cancel' to escape")
     elif route_parsing == 4:
         route_parsing = 0
         updateJsonData(fname, route_parsing, location, transport, destinations)
         if "yes" in message:
-            IMG_URL = staticmap.reply_image_msg(destinations, transport)
+            IMG_URL = staticmap.reply_image_msg(destinations)
             response = MessagingResponse()
             msg = response.message("Enjoy your trip!")
             msg.media(IMG_URL)
