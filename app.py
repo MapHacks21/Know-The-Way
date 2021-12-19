@@ -90,7 +90,7 @@ def reply():
     print(route_parsing)
     if "cancel" in message:
         route_parsing = 0
-        updateJsonData(fname, route_parsing, location, "walk", destinations)
+        updateJsonData(fname, route_parsing, location, "walk", [])
         return respond("Input cancelled")
     elif route_parsing == 1:
         print("collecting location")
@@ -134,7 +134,7 @@ def reply():
             return respond("Please input destinations, or type 'cancel' to escape")
     elif route_parsing == 4:
         route_parsing = 0
-        updateJsonData(fname, route_parsing, location, transport, destinations)
+        updateJsonData(fname, route_parsing, location, transport, [])
         if "yes" in message:
             IMG_URL = staticmap.reply_image_msg(destinations)
             response = MessagingResponse()
@@ -156,7 +156,7 @@ def reply():
     elif "suggestions" in message:
         print("suggestions")
         keywords = message.replace('suggestions ', "")
-        info = SerpApiSearches.search_location(keywords)
+        info = SerpApiSearches.suggest_location(keywords)
 
         return respond(info)
     elif 'help' in message or 'instruction' in message or 'how to' in message:

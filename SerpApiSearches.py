@@ -1,12 +1,10 @@
 from serpapi import GoogleSearch
 import secrets
 
-search_location = "Singapore"
-
-def suggest_location (search_location):
+def suggest_location(search_location):
   params = {
     "engine": "google",
-    "q": search_location,
+    "q": search_location + " attractions",
     "api_key": secrets.serpapiKey
   }
 
@@ -25,7 +23,7 @@ def suggest_location (search_location):
       sights_suggested += i['title'] + '\n'
 
     print(sights_suggested)
-    results_string = top_sights
+    results_string = sights_suggested
   elif "popular_destinations" in results:
     destinations = results["popular_destinations"]["destinations"]
     destinations_string = "Suggested places to visit:"
@@ -37,4 +35,10 @@ def suggest_location (search_location):
   else:
     results_string = "No suggestions found."
 
+  if not results_string.strip():
+    results_string = "No suggestions found."
+  print("here")
   return results_string
+
+results = suggest_location("usa")
+print(results)
